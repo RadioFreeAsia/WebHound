@@ -3,7 +3,7 @@ This is the README file for the WebHound package.
 This software comes with ABSOLUTELY NO WARRANTY.  See the file 'COPYING' for
 details.
 
-See the file 'INSTALL' for instructions on building GlassNet from source.
+See the file 'INSTALL' for instructions on building WebHound from source.
 
 WebHound is a system for tracking usage and versions of web-enabled
 software by means of the software's USER_AGENT header information.
