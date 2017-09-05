@@ -30,13 +30,21 @@ moc_%.cpp:	%.h
 
 bin_PROGRAMS = whc
 
-dist_whc_SOURCES = createdb.cpp\
+dist_whc_SOURCES = accessor.cpp accessor.h\
+                   createdb.cpp\
+                   editprogram.cpp editprogram.h\
+                   sqltablemodel.cpp sqltablemodel.h\
+                   program.cpp program.h\
+                   tableview.cpp tableview.h\
                    whc.cpp whc.h
 
 nodist_whc_SOURCES = cmdswitch.cpp cmdswitch.h\
                      config.cpp config.h\
                      db.cpp db.h\
                      moc_db.cpp\
+                     moc_editprogram.cpp\
+                     moc_sqltablemodel.cpp\
+                     moc_tableview.cpp\
                      moc_whc.cpp\
                      profile.cpp profile.h
 

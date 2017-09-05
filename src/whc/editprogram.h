@@ -1,6 +1,6 @@
-// whc.h
+// editprogram.h
 //
-// whc(1) Management client for WebHound
+// Edit a WebHound program definition
 //
 //   (C) Copyright 2017 Fred Gleason <fredg@paravelsystems.com>
 //
@@ -18,49 +18,44 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef WHC_H
-#define WHC_H
+#ifndef EDITPROGRAM_H
+#define EDITPROGRAM_H
 
+#include <QDialog>
 #include <QLabel>
-#include <QMainWindow>
+#include <QLineEdit>
 #include <QPushButton>
+#include <QResizeEvent>
 
-#include "config.h"
-#include "editprogram.h"
-#include "sqltablemodel.h"
-#include "tableview.h"
-
-#define WHC_USAGE "\n"
-
-class MainWidget : public QMainWindow
+class EditProgram : public QDialog
 {
- Q_OBJECT;
+  Q_OBJECT
  public:
-  MainWidget(QWidget *parent=0);
+  EditProgram(QWidget *parent=0);
+  ~EditProgram();
   QSize sizeHint() const;
+  
+ public slots:
+  int exec(int *pgm_id);
 
  private slots:
-  void addData();
-  void editData();
-  void deleteData();
+  void okData();
+  void cancelData();
 
  protected:
-  void closeEvent(QCloseEvent *e);
   void resizeEvent(QResizeEvent *e);
 
  private:
-  bool CheckDb(QString *err_msg);
-  bool CreateDb();
-  bool CheckSchema();
-  TableView *whc_view;
-  SqlTableModel *whc_model;
-  QPushButton *whc_add_button;
-  QPushButton *whc_edit_button;
-  QPushButton *whc_delete_button;
-  QPushButton *whc_close_button;
-  EditProgram *whc_editprogram_dialog;
-  Config *whc_config;
+  QLabel *edit_name_label;
+  QLineEdit *edit_name_edit;
+  QLabel *edit_description_label;
+  QLineEdit *edit_description_edit;
+  QLabel *edit_user_agent_string_label;
+  QLineEdit *edit_user_agent_string_edit;
+  QPushButton *edit_ok_button;
+  QPushButton *edit_cancel_button;
+  int *edit_program_id;
 };
 
 
-#endif  // WHC_H
+#endif  // EDITPROGRAM_H

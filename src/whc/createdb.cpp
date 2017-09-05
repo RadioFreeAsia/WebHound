@@ -99,6 +99,7 @@ bool MainWidget::CheckSchema()
     sql=QString("create table PROGRAMS (")+
       "ID integer primary key auto_increment,"+
       "NAME char(64) unique not null,"+
+      "USER_AGENT_STRING text,"+
       "DESCRIPTION text)"+
       whc_config->createTablePostfix();
     SqlQuery::run(sql,&ok);
