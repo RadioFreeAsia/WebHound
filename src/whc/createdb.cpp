@@ -109,9 +109,10 @@ bool MainWidget::CheckSchema()
 
     sql=QString("create table HOSTS (")+
       "ID integer primary key auto_increment,"+
-      "NAME char(255) unique not null,"+
+      "NAME char(255) not null,"+
       "PROGRAM_NAME char(64) not null,"+
-      "PROGRAM_VERSION char(32),"+
+      "USER_AGENT_VERSION char(32),"+
+      "USER_AGENT_OPTIONS text,"+
       "LAST_SEEN datetime not null,"+
       "index NAME_IDX(NAME),"+
       "index PROGRAM_NAME_IDX(PROGRAM_NAME))"+

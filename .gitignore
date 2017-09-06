@@ -26,3 +26,12 @@ src/whc/moc_whc.cpp
 src/whc/profile.cpp
 src/whc/profile.h
 src/whc/whc
+src/whprocess/cmdswitch.cpp
+src/whprocess/cmdswitch.h
+src/whprocess/config.cpp
+src/whprocess/config.h
+src/whprocess/db.cpp
+src/whprocess/db.h
+src/whprocess/profile.cpp
+src/whprocess/profile.h
+src/whprocess/whprocess

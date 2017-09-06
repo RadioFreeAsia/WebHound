@@ -99,6 +99,7 @@ AC_CONFIG_FILES([ \
     src/Makefile \
     src/common/Makefile \
     src/whc/Makefile \
+    src/whprocess/Makefile \
     webhound.spec \
     Makefile ])
 AC_OUTPUT()
@@ -107,6 +108,7 @@ AC_OUTPUT()
 # Link Common Elements
 #
 ./link_common.sh whc
+./link_common.sh whprocess
 
 AC_MSG_NOTICE()
 AC_MSG_NOTICE(Now enter 'make' to build the software.)
