@@ -80,6 +80,7 @@ bool MainObject::ProcessLine(const QString &line)
   SqlQuery *q1;
   bool ret=false;
   ClfEntry *clf=new ClfEntry();
+  int pgm_quan=0;
 
   if(clf->parse(line)) {
     for(int i=0;i<clf->userAgentQuantity();i++) {
@@ -87,6 +88,7 @@ bool MainObject::ProcessLine(const QString &line)
 	"USER_AGENT_STRING=\""+SqlQuery::escape(clf->userAgent(i)->name())+"\"";
       q=new SqlQuery(sql);
       while(q->next()) {
+	pgm_quan++;
 	sql=QString("select LAST_SEEN from HOSTS where ")+
 	  "(NAME=\""+SqlQuery::escape(clf->hostName())+"\")&&"+
 	  QString().sprintf("(PROGRAM_ID=%d)",q->value(0).toInt());
@@ -116,6 +118,30 @@ bool MainObject::ProcessLine(const QString &line)
 	  SqlQuery::run(sql);
 	}
 	delete q1;
+      }
+      delete q;
+    }
+    if(pgm_quan==0) {
+      sql=QString("select ID from UNKNOWN_EVENTS where ")+
+	"(HOSTNAME=\""+SqlQuery::escape(clf->hostName())+"\")&&"+
+	"(USER_AGENT=\""+SqlQuery::escape(clf->userAgentString())+"\")";
+      q=new SqlQuery(sql);
+      if(q->first()) {
+	sql=QString("update UNKNOWN_EVENTS set ")+
+	  "LOG_LINE=\""+SqlQuery::escape(line)+"\","+
+	  "LAST_SEEN=\""+clf->timestamp().toString("yyyy-MM-dd hh:mm:ss")+"\" "+
+	  "where "+
+	  "(HOSTNAME=\""+SqlQuery::escape(clf->hostName())+"\")&&"+
+	  "(USER_AGENT=\""+SqlQuery::escape(clf->userAgentString())+"\")";
+	SqlQuery::run(sql);
+      }
+      else {
+	sql=QString("insert into UNKNOWN_EVENTS set ")+
+	  "HOSTNAME=\""+SqlQuery::escape(clf->hostName())+"\","+
+	  "USER_AGENT=\""+SqlQuery::escape(clf->userAgentString())+"\","+
+	  "LAST_SEEN=\""+clf->timestamp().toString("yyyy-MM-dd hh:mm:ss")+"\","+
+	  "LOG_LINE=\""+SqlQuery::escape(line)+"\"";
+	SqlQuery::run(sql);
       }
       delete q;
     }

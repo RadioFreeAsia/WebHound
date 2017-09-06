@@ -34,6 +34,7 @@ dist_whc_SOURCES = accessor.cpp accessor.h\
                    createdb.cpp\
                    editprogram.cpp editprogram.h\
                    listhosts.cpp listhosts.h\
+                   listunknowns.cpp listunknowns.h\
                    program.cpp program.h\
                    sqltablemodel.cpp sqltablemodel.h\
                    tableview.cpp tableview.h\
@@ -45,6 +46,7 @@ nodist_whc_SOURCES = cmdswitch.cpp cmdswitch.h\
                      moc_db.cpp\
                      moc_editprogram.cpp\
                      moc_listhosts.cpp\
+                     moc_listunknowns.cpp\
                      moc_sqltablemodel.cpp\
                      moc_tableview.cpp\
                      moc_whc.cpp\

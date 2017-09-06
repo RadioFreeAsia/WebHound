@@ -1,6 +1,6 @@
-// whc.h
+// listunknowns.h
 //
-// whc(1) Management client for WebHound
+// List unrecognized user agents
 //
 //   (C) Copyright 2017 Fred Gleason <fredg@paravelsystems.com>
 //
@@ -18,58 +18,39 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef WHC_H
-#define WHC_H
+#ifndef LISTUNKNOWNS_H
+#define LISTUNKNOWNS_H
 
-#include <QLabel>
-#include <QMainWindow>
+#include <QDialog>
 #include <QPushButton>
 
 #include "config.h"
-#include "editprogram.h"
-#include "listhosts.h"
-#include "listunknowns.h"
 #include "sqltablemodel.h"
 #include "tableview.h"
 
-#define WHC_USAGE "\n"
-
-class MainWidget : public QMainWindow
+class ListUnknowns : public QDialog
 {
  Q_OBJECT;
  public:
-  MainWidget(QWidget *parent=0);
+  ListUnknowns(QWidget *parent=0);
   QSize sizeHint() const;
 
+ public slots:
+  int exec();
+
  private slots:
-  void addData();
-  void editData();
-  void deleteData();
-  void listhostsData();
-  void listunknownsData();
-  void doubleClickedData(const QModelIndex &index);
+  void closeData();
 
  protected:
   void closeEvent(QCloseEvent *e);
   void resizeEvent(QResizeEvent *e);
 
  private:
-  bool CheckDb(QString *err_msg);
-  bool CreateDb();
-  bool CheckSchema();
-  TableView *whc_view;
-  SqlTableModel *whc_model;
-  QPushButton *whc_add_button;
-  QPushButton *whc_edit_button;
-  QPushButton *whc_delete_button;
-  QPushButton *whc_listhosts_button;
-  QPushButton *whc_listunknowns_button;
-  QPushButton *whc_close_button;
-  EditProgram *whc_editprogram_dialog;
-  ListHosts *whc_listhosts_dialog;
-  ListUnknowns *whc_listunknowns_dialog;
-  Config *whc_config;
+  TableView *list_view;
+  SqlTableModel *list_model;
+  QPushButton *list_close_button;
+  Config *list_config;
 };
 
 
-#endif  // WHC_H
+#endif  // LISTUNKNOWNS_H

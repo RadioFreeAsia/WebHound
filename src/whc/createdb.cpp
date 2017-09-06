@@ -124,6 +124,22 @@ bool MainWidget::CheckSchema()
     }
   }
 
+  if(schema<2) {
+    sql=QString("create table UNKNOWN_EVENTS (")+
+      "ID integer primary key auto_increment,"+
+      "HOSTNAME char(255) not null,"+
+      "USER_AGENT char(255),"+
+      "LAST_SEEN datetime not null,"+
+      "LOG_LINE text not null,"+
+      "index HOSTNAME_IDX(HOSTNAME,USER_AGENT))"+
+      whc_config->createTablePostfix();
+    SqlQuery::run(sql,&ok);
+    if(!ok) {
+      return false;
+    }
+  }
+
+
 
   //
   // *** End of schema updates ***
