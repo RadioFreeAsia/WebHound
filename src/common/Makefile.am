@@ -21,6 +21,7 @@
 ## Use automake to process this into a Makefile.in
 
 EXTRA_DIST = cmdswitch.cpp cmdswitch.h\
+             config.cpp config.h\
              db.cpp db.h\
              profile.cpp profile.h
 

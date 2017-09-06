@@ -10,3 +10,5 @@
 	* Added an 'UNKNOWN_EVENTS' table to the database.
 	* Incremented the database version to 2.
 	* Added a 'List Unknown Events' dialog to whc(1).
+2017-09-06 Fred Gleason <fredg@paravelsystems.com>
+	* Enabled the 'make rpm' target.
