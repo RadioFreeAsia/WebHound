@@ -83,13 +83,13 @@ bool MainObject::ProcessLine(const QString &line)
 
   if(clf->parse(line)) {
     for(int i=0;i<clf->userAgentQuantity();i++) {
-      sql=QString("select NAME from PROGRAMS where ")+
+      sql=QString("select ID from PROGRAMS where ")+
 	"USER_AGENT_STRING=\""+SqlQuery::escape(clf->userAgent(i)->name())+"\"";
       q=new SqlQuery(sql);
       while(q->next()) {
 	sql=QString("select LAST_SEEN from HOSTS where ")+
 	  "(NAME=\""+SqlQuery::escape(clf->hostName())+"\")&&"+
-	  "(PROGRAM_NAME=\""+SqlQuery::escape(q->value(0).toString())+"\")";
+	  QString().sprintf("(PROGRAM_ID=%d)",q->value(0).toInt());
 	q1=new SqlQuery(sql);
 	if(q1->first()) {
 	  if(q1->value(0).toDateTime()<clf->timestamp()) {
@@ -97,7 +97,7 @@ bool MainObject::ProcessLine(const QString &line)
 	      "LAST_SEEN=\""+
 	      clf->timestamp().toString("yyyy-MM-dd hh:mm:ss")+"\" where "+
 	      "(NAME=\""+SqlQuery::escape(clf->hostName())+"\")&&"+
-	      "(PROGRAM_NAME=\""+SqlQuery::escape(q->value(0).toString())+"\")";
+	      QString().sprintf("(PROGRAM_ID=%d)",q->value(0).toInt());
 	  printf("SQL: %s\n",(const char *)sql.toUtf8());
 	    SqlQuery::run(sql);
 	  }
@@ -105,7 +105,7 @@ bool MainObject::ProcessLine(const QString &line)
 	else {
 	  sql=QString("insert into HOSTS set ")+
 	    "NAME=\""+SqlQuery::escape(clf->hostName())+"\","+
-	    "PROGRAM_NAME=\""+SqlQuery::escape(q->value(0).toString())+"\","+
+	    QString().sprintf("PROGRAM_ID=%d,",q->value(0).toInt())+
 	    "USER_AGENT_VERSION=\""+
 	    SqlQuery::escape(clf->userAgent(i)->version())+"\","+
 	    "USER_AGENT_OPTIONS=\""+

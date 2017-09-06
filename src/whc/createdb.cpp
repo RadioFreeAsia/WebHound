@@ -99,8 +99,9 @@ bool MainWidget::CheckSchema()
     sql=QString("create table PROGRAMS (")+
       "ID integer primary key auto_increment,"+
       "NAME char(64) unique not null,"+
-      "USER_AGENT_STRING text,"+
-      "DESCRIPTION text)"+
+      "USER_AGENT_STRING char(64),"+
+      "DESCRIPTION text,"+
+      "index USER_AGENT_STRING_IDX(USER_AGENT_STRING))"+
       whc_config->createTablePostfix();
     SqlQuery::run(sql,&ok);
     if(!ok) {
@@ -110,12 +111,12 @@ bool MainWidget::CheckSchema()
     sql=QString("create table HOSTS (")+
       "ID integer primary key auto_increment,"+
       "NAME char(255) not null,"+
-      "PROGRAM_NAME char(64) not null,"+
+      "PROGRAM_ID int not null,"+
       "USER_AGENT_VERSION char(32),"+
       "USER_AGENT_OPTIONS text,"+
       "LAST_SEEN datetime not null,"+
       "index NAME_IDX(NAME),"+
-      "index PROGRAM_NAME_IDX(PROGRAM_NAME))"+
+      "index PROGRAM_ID_IDX(PROGRAM_ID,NAME))"+
       whc_config->createTablePostfix();
     SqlQuery::run(sql,&ok);
     if(!ok) {

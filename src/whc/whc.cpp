@@ -67,6 +67,7 @@ MainWidget::MainWidget(QWidget *parent)
   // Dialogs
   //
   whc_editprogram_dialog=new EditProgram(this);
+  whc_listhosts_dialog=new ListHosts(this);
 
   //
   // Programs List
@@ -86,6 +87,8 @@ MainWidget::MainWidget(QWidget *parent)
   whc_view=new TableView(this);
   whc_view->setModel(whc_model);
   whc_view->resizeColumnsToContents();
+  connect(whc_view,SIGNAL(doubleClicked(const QModelIndex &)),
+	  this,SLOT(doubleClickedData(const QModelIndex &)));
 
   //
   // Add Button
@@ -107,6 +110,13 @@ MainWidget::MainWidget(QWidget *parent)
   whc_delete_button=new QPushButton(tr("Delete"),this);
   whc_delete_button->setFont(label_font);
   connect(whc_delete_button,SIGNAL(clicked()),this,SLOT(deleteData()));
+
+  //
+  // List Hosts Button
+  //
+  whc_listhosts_button=new QPushButton(tr("List")+"\n"+tr("Hosts"),this);
+  whc_listhosts_button->setFont(label_font);
+  connect(whc_listhosts_button,SIGNAL(clicked()),this,SLOT(listhostsData()));
 
   //
   // Close Button
@@ -170,6 +180,21 @@ void MainWidget::deleteData()
 }
 
 
+void MainWidget::listhostsData()
+{
+  QItemSelectionModel *s=whc_view->selectionModel();
+  if(s->hasSelection()) {
+    whc_listhosts_dialog->exec(s->selectedRows()[0].data().toInt());
+  }
+}
+
+
+void MainWidget::doubleClickedData(const QModelIndex &index)
+{
+  listhostsData();
+}
+
+
 void MainWidget::closeEvent(QCloseEvent *e)
 {
   exit(0);
@@ -183,6 +208,8 @@ void MainWidget::resizeEvent(QResizeEvent *e)
   whc_add_button->setGeometry(10,size().height()-70,80,60);
   whc_edit_button->setGeometry(100,size().height()-70,80,60);
   whc_delete_button->setGeometry(190,size().height()-70,80,60);
+
+  whc_listhosts_button->setGeometry(370,size().height()-70,80,60);
 
   whc_close_button->setGeometry(size().width()-90,size().height()-70,80,60);
 }

@@ -33,8 +33,9 @@ bin_PROGRAMS = whc
 dist_whc_SOURCES = accessor.cpp accessor.h\
                    createdb.cpp\
                    editprogram.cpp editprogram.h\
-                   sqltablemodel.cpp sqltablemodel.h\
+                   listhosts.cpp listhosts.h\
                    program.cpp program.h\
+                   sqltablemodel.cpp sqltablemodel.h\
                    tableview.cpp tableview.h\
                    whc.cpp whc.h
 
@@ -43,6 +44,7 @@ nodist_whc_SOURCES = cmdswitch.cpp cmdswitch.h\
                      db.cpp db.h\
                      moc_db.cpp\
                      moc_editprogram.cpp\
+                     moc_listhosts.cpp\
                      moc_sqltablemodel.cpp\
                      moc_tableview.cpp\
                      moc_whc.cpp\
