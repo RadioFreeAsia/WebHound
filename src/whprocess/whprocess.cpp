@@ -83,6 +83,9 @@ bool MainObject::ProcessLine(const QString &line)
   int pgm_quan=0;
 
   if(clf->parse(line)) {
+    //
+    // Log known UA(s)
+    //
     for(int i=0;i<clf->userAgentQuantity();i++) {
       sql=QString("select ID from PROGRAMS where ")+
 	"USER_AGENT_STRING=\""+SqlQuery::escape(clf->userAgent(i)->name())+"\"";
@@ -100,7 +103,6 @@ bool MainObject::ProcessLine(const QString &line)
 	      clf->timestamp().toString("yyyy-MM-dd hh:mm:ss")+"\" where "+
 	      "(NAME=\""+SqlQuery::escape(clf->hostName())+"\")&&"+
 	      QString().sprintf("(PROGRAM_ID=%d)",q->value(0).toInt());
-	  printf("SQL: %s\n",(const char *)sql.toUtf8());
 	    SqlQuery::run(sql);
 	  }
 	}
@@ -114,31 +116,44 @@ bool MainObject::ProcessLine(const QString &line)
 	    SqlQuery::escape(clf->userAgent(i)->options().join("; "))+"\","+
 	    "LAST_SEEN=\""+
 	    clf->timestamp().toString("yyyy-MM-dd hh:mm:ss")+"\"";
-	  printf("SQL: %s\n",(const char *)sql.toUtf8());
 	  SqlQuery::run(sql);
 	}
 	delete q1;
       }
       delete q;
     }
+
+    //
+    // Log if no known UAs were found
+    //
     if(pgm_quan==0) {
-      sql=QString("select ID from UNKNOWN_EVENTS where ")+
-	"(HOSTNAME=\""+SqlQuery::escape(clf->hostName())+"\")&&"+
+      sql=QString("select ID from UNKNOWN_USER_AGENTS where ")+
 	"(USER_AGENT=\""+SqlQuery::escape(clf->userAgentString())+"\")";
       q=new SqlQuery(sql);
       if(q->first()) {
-	sql=QString("update UNKNOWN_EVENTS set ")+
-	  "LOG_LINE=\""+SqlQuery::escape(line)+"\","+
-	  "LAST_SEEN=\""+clf->timestamp().toString("yyyy-MM-dd hh:mm:ss")+"\" "+
-	  "where "+
-	  "(HOSTNAME=\""+SqlQuery::escape(clf->hostName())+"\")&&"+
-	  "(USER_AGENT=\""+SqlQuery::escape(clf->userAgentString())+"\")";
-	SqlQuery::run(sql);
+	sql=QString("select ID from UNKNOWN_HOSTS where ")+
+	  QString().sprintf("(USER_AGENT_ID=%d)&&",q->value(0).toInt())+
+	  "(HOSTNAME=\""+SqlQuery::escape(clf->hostName())+"\")";
+	q1=new SqlQuery(sql);
+	if(q1->first()) {
+	  sql=QString("update UNKNOWN_HOSTS set ")+
+	    "LOG_LINE=\""+SqlQuery::escape(line)+"\","+
+	    "LAST_SEEN=\""+
+	    clf->timestamp().toString("yyyy-MM-dd hh:mm:ss")+"\" "+
+	    "where "+
+	    "(HOSTNAME=\""+SqlQuery::escape(clf->hostName())+"\")&&"+
+	    QString().sprintf("(USER_AGENT_ID=%d)",q1->value(0).toInt());
+	  SqlQuery::run(sql);
+	}
+	delete q1;
       }
       else {
-	sql=QString("insert into UNKNOWN_EVENTS set ")+
+	sql=QString("insert into UNKNOWN_USER_AGENTS set ")+
+	  "USER_AGENT=\""+SqlQuery::escape(clf->userAgentString())+"\"";
+	int ua_id=SqlQuery::run(sql).toInt();
+	sql=QString("insert into UNKNOWN_HOSTS set ")+
 	  "HOSTNAME=\""+SqlQuery::escape(clf->hostName())+"\","+
-	  "USER_AGENT=\""+SqlQuery::escape(clf->userAgentString())+"\","+
+	  QString().sprintf("USER_AGENT_ID=%d,",ua_id)+
 	  "LAST_SEEN=\""+clf->timestamp().toString("yyyy-MM-dd hh:mm:ss")+"\","+
 	  "LOG_LINE=\""+SqlQuery::escape(line)+"\"";
 	SqlQuery::run(sql);

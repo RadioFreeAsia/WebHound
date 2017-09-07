@@ -68,7 +68,7 @@ MainWidget::MainWidget(QWidget *parent)
   //
   whc_editprogram_dialog=new EditProgram(this);
   whc_listhosts_dialog=new ListHosts(this);
-  whc_listunknowns_dialog=new ListUnknowns(this);
+  whc_listunknownuas_dialog=new ListUnknownUas(this);
 
   //
   // Programs List
@@ -77,14 +77,12 @@ MainWidget::MainWidget(QWidget *parent)
   whc_model->setQuery(QString("select ")+
 		      "ID,"+
 		      "NAME,"+
-		      "DESCRIPTION,"+
-		      "USER_AGENT_STRING "+
+		      "DESCRIPTION "+
 		      "from PROGRAMS order by NAME");
   whc_model->setHeaderData(0,Qt::Horizontal,tr("ID"));
   whc_model->setFieldType(0,SqlTableModel::NumericType);
   whc_model->setHeaderData(1,Qt::Horizontal,tr("Program"));
   whc_model->setHeaderData(2,Qt::Horizontal,tr("Description"));
-  whc_model->setHeaderData(3,Qt::Horizontal,tr("User Agent String"));
   whc_view=new TableView(this);
   whc_view->setModel(whc_model);
   whc_view->resizeColumnsToContents();
@@ -120,9 +118,9 @@ MainWidget::MainWidget(QWidget *parent)
   //
   // List Unknowns Button
   //
-  whc_listunknowns_button=new QPushButton(tr("Unknown")+"\n"+tr("UAs"),this);
-  whc_listunknowns_button->setFont(label_font);
-  connect(whc_listunknowns_button,SIGNAL(clicked()),this,SLOT(listunknownsData()));
+  whc_listunknownuas_button=new QPushButton(tr("Unknown")+"\n"+tr("User")+"\n"+tr("Agents"),this);
+  whc_listunknownuas_button->setFont(label_font);
+  connect(whc_listunknownuas_button,SIGNAL(clicked()),this,SLOT(listunknownuasData()));
 
   //
   // Close Button
@@ -130,12 +128,14 @@ MainWidget::MainWidget(QWidget *parent)
   whc_close_button=new QPushButton(tr("Close"),this);
   whc_close_button->setFont(label_font);
   connect(whc_close_button,SIGNAL(clicked()),qApp,SLOT(quit()));
+
+  setMinimumSize(sizeHint());
 }
 
 
 QSize MainWidget::sizeHint() const
 {
-  return QSize(640,480);
+  return QSize(600,400);
 }
 
 
@@ -195,9 +195,9 @@ void MainWidget::listhostsData()
 }
 
 
-void MainWidget::listunknownsData()
+void MainWidget::listunknownuasData()
 {
-  whc_listunknowns_dialog->exec();
+  whc_listunknownuas_dialog->exec();
 }
 
 
@@ -212,11 +212,11 @@ void MainWidget::resizeEvent(QResizeEvent *e)
   whc_view->setGeometry(10,10,size().width()-20,size().height()-90);
 
   whc_add_button->setGeometry(10,size().height()-70,80,60);
-  whc_edit_button->setGeometry(100,size().height()-70,80,60);
-  whc_delete_button->setGeometry(190,size().height()-70,80,60);
+  whc_edit_button->setGeometry(95,size().height()-70,80,60);
+  whc_delete_button->setGeometry(180,size().height()-70,80,60);
+  whc_listhosts_button->setGeometry(265,size().height()-70,80,60);
 
-  whc_listhosts_button->setGeometry(320,size().height()-70,80,60);
-  whc_listunknowns_button->setGeometry(420,size().height()-70,80,60);
+  whc_listunknownuas_button->setGeometry(385,size().height()-70,80,60);
 
   whc_close_button->setGeometry(size().width()-90,size().height()-70,80,60);
 }

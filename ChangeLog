@@ -14,3 +14,10 @@
 	* Enabled the 'make rpm' target.
 2017-09-07 Fred Gleason <fredg@paravelsystems.com>
 	* Removed the double-click action from the whc(1) main screen.
+2017-09-07 Fred Gleason <fredg@paravelsystems.com>
+	* Removed the 'UNKNOWN_EVENTS' table from the database.
+	* Added a 'UNKNOWN_USER_AGENTS' table to the database.
+	* Added a 'UNKNOWN_HOSTS' table to the database.
+	* Added a 'List Unknow User Agents' dialog in whc(1).
+	* Added a 'List Unknown Hosts' dialog' in whc(1).
+	* Added a 'Show Unknown Host LogLine' dialog whc(1).

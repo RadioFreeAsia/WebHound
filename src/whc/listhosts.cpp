@@ -58,6 +58,8 @@ ListHosts::ListHosts(QWidget *parent)
   list_close_button=new QPushButton(tr("Close"),this);
   list_close_button->setFont(label_font);
   connect(list_close_button,SIGNAL(clicked()),this,SLOT(closeData()));
+
+  setMinimumSize(sizeHint());
 }
 
 

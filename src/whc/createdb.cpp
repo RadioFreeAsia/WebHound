@@ -125,20 +125,29 @@ bool MainWidget::CheckSchema()
   }
 
   if(schema<2) {
-    sql=QString("create table UNKNOWN_EVENTS (")+
+    sql=QString("create table UNKNOWN_USER_AGENTS (")+
       "ID integer primary key auto_increment,"+
-      "HOSTNAME char(255) not null,"+
       "USER_AGENT char(255),"+
+      "index USER_AGENT_IDX(USER_AGENT))"+
+      whc_config->createTablePostfix();
+    SqlQuery::run(sql,&ok);
+    if(!ok) {
+      return false;
+    }
+
+    sql=QString("create table UNKNOWN_HOSTS (")+
+      "ID integer primary key auto_increment,"+
+      "USER_AGENT_ID int not null,"+
+      "HOSTNAME char(255) not null,"+
       "LAST_SEEN datetime not null,"+
       "LOG_LINE text not null,"+
-      "index HOSTNAME_IDX(HOSTNAME,USER_AGENT))"+
+      "index USER_AGENT_ID_IDX(USER_AGENT_ID))"+
       whc_config->createTablePostfix();
     SqlQuery::run(sql,&ok);
     if(!ok) {
       return false;
     }
   }
-
 
 
   //

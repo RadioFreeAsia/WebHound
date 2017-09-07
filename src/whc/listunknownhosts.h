@@ -1,4 +1,4 @@
-// listunknowns.h
+// listunknownhosts.h
 //
 // List unrecognized user agents
 //
@@ -18,27 +18,29 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef LISTUNKNOWNS_H
-#define LISTUNKNOWNS_H
+#ifndef LISTUNKNOWNHOSTS_H
+#define LISTUNKNOWNHOSTS_H
 
 #include <QDialog>
 #include <QPushButton>
 
 #include "config.h"
+#include "showlogline.h"
 #include "sqltablemodel.h"
 #include "tableview.h"
 
-class ListUnknowns : public QDialog
+class ListUnknownHosts : public QDialog
 {
  Q_OBJECT;
  public:
-  ListUnknowns(QWidget *parent=0);
+  ListUnknownHosts(QWidget *parent=0);
   QSize sizeHint() const;
 
  public slots:
-  int exec();
+  int exec(int ua_id);
 
  private slots:
+  void showloglineData();
   void closeData();
 
  protected:
@@ -48,9 +50,11 @@ class ListUnknowns : public QDialog
  private:
   TableView *list_view;
   SqlTableModel *list_model;
+  QPushButton *list_showlogline_button;
   QPushButton *list_close_button;
+  ShowLogLine *list_showlogline_dialog;
   Config *list_config;
 };
 
 
-#endif  // LISTUNKNOWNS_H
+#endif  // LISTUNKNOWNHOSTS_H
