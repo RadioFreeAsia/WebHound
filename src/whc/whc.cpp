@@ -88,8 +88,6 @@ MainWidget::MainWidget(QWidget *parent)
   whc_view=new TableView(this);
   whc_view->setModel(whc_model);
   whc_view->resizeColumnsToContents();
-  connect(whc_view,SIGNAL(doubleClicked(const QModelIndex &)),
-	  this,SLOT(doubleClickedData(const QModelIndex &)));
 
   //
   // Add Button
@@ -200,12 +198,6 @@ void MainWidget::listhostsData()
 void MainWidget::listunknownsData()
 {
   whc_listunknowns_dialog->exec();
-}
-
-
-void MainWidget::doubleClickedData(const QModelIndex &index)
-{
-  listhostsData();
 }
 
 

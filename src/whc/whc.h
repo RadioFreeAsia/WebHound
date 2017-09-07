@@ -47,7 +47,6 @@ class MainWidget : public QMainWindow
   void deleteData();
   void listhostsData();
   void listunknownsData();
-  void doubleClickedData(const QModelIndex &index);
 
  protected:
   void closeEvent(QCloseEvent *e);

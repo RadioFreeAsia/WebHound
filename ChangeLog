@@ -12,3 +12,5 @@
 	* Added a 'List Unknown Events' dialog to whc(1).
 2017-09-06 Fred Gleason <fredg@paravelsystems.com>
 	* Enabled the 'make rpm' target.
+2017-09-07 Fred Gleason <fredg@paravelsystems.com>
+	* Removed the double-click action from the whc(1) main screen.
