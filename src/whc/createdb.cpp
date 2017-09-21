@@ -149,6 +149,36 @@ bool MainWidget::CheckSchema()
     }
   }
 
+  if(schema<3) {
+    sql=QString("alter table HOSTS ")+
+      "add column IP_ADDRESS char(30) after NAME";
+    SqlQuery::run(sql,&ok);
+    if(!ok) {
+      return false;
+    }
+
+    sql=QString("alter table UNKNOWN_HOSTS ")+
+      "add column IP_ADDRESS char(30) after HOSTNAME";
+    SqlQuery::run(sql,&ok);
+    if(!ok) {
+      return false;
+    }
+  }
+
+  if(schema<4) {
+    sql=QString("create index NAME__LAST_SEEN_IDX on HOSTS (NAME,LAST_SEEN)");
+    SqlQuery::run(sql,&ok);
+    if(!ok) {
+      return false;
+    }
+
+    sql=QString("create index HOSTNAME_IDX on UNKNOWN_HOSTS (HOSTNAME)");
+    SqlQuery::run(sql,&ok);
+    if(!ok) {
+      return false;
+    }
+  }
+
 
   //
   // *** End of schema updates ***

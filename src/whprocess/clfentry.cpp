@@ -18,8 +18,11 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
+#include <netdb.h>
 #include <stdio.h>
+#include <sys/socket.h>
 
+#include <QObject>
 #include <QStringList>
 
 #include "clfentry.h"
@@ -77,6 +80,12 @@ ClfEntry::ClfEntry()
 QString ClfEntry::hostName() const
 {
   return clf_host_name;
+}
+
+
+QHostAddress ClfEntry::hostAddress() const
+{
+  return clf_host_address;
 }
 
 
@@ -163,6 +172,7 @@ QString ClfEntry::dump() const
   QString ret="";
 
   ret+="hostName: "+hostName()+"\n";
+  ret+="hostAddress: "+hostAddress().toString()+"\n";
   ret+="identUsername: "+identUsername()+"\n";
   ret+="httpUsername: "+httpUsername()+"\n";
   ret+="timestamp: "+timestamp().toString("yyyy-MM-dd hh:mm:ss")+"\n";
@@ -202,7 +212,13 @@ bool ClfEntry::parse(const QString &line)
   for(int i=0;i<f0.size();i++) {
     switch(field) {
     case 0:  // Hostname
-      clf_host_name=StringField(f0.at(i));
+      if(clf_host_address.setAddress(f0.at(i))) {
+	clf_host_name=GetDnsName(clf_host_address);
+      }
+      else {
+	clf_host_name=StringField(f0.at(i));
+	clf_host_address=GetDnsAddress(clf_host_name);
+      }
       field++;
       break;
 
@@ -251,6 +267,10 @@ bool ClfEntry::parse(const QString &line)
       break;
 
     case 6:  // Request Protocol
+      if(f0.at(i).trimmed()=="-") {  // No http request logged at all
+	field+=2;
+	break;
+      }
       if(f0.at(i).right(1)!="\"") {
 	return false;
       }
@@ -395,5 +415,84 @@ QString ClfEntry::DelimitedField(QStringList *fields,int *ptr,
   ret=StringField(ret);
 
   *ok=true;
+  return ret;
+}
+
+
+QString ClfEntry::GetDnsName(const QHostAddress &addr) const
+{
+  char host[PATH_MAX];
+  struct sockaddr_in sa_in;
+  struct sockaddr_in6 sa_in6;
+  QString ret=QObject::tr("UNKNOWN");
+  Q_IPV6ADDR addr6;
+  int i;
+
+  switch(addr.protocol()) {
+  case QAbstractSocket::IPv4Protocol:
+    memset(&sa_in,0,sizeof(sa_in));
+    sa_in.sin_family=AF_INET;
+    sa_in.sin_addr.s_addr=htonl(addr.toIPv4Address());
+    if(getnameinfo((const struct sockaddr *)(&sa_in),sizeof(sa_in),
+		   host,PATH_MAX,NULL,0,NI_NAMEREQD)==0) {
+      ret=host;
+    }
+    else {
+      ret=addr.toString();
+    }
+    break;
+
+  case QAbstractSocket::IPv6Protocol:
+    memset(&sa_in6,0,sizeof(sa_in6));
+    sa_in6.sin6_family=AF_INET6;
+    addr6=addr.toIPv6Address();
+    for(i=0;i<16;i++) {
+      sa_in6.sin6_addr.s6_addr[i]=addr6[i];
+    }
+    if(getnameinfo((const struct sockaddr *)(&sa_in6),sizeof(sa_in6),
+		   host,PATH_MAX,NULL,0,NI_NAMEREQD)==0) {
+      ret=host;
+    }
+    else {
+      ret=addr.toString();
+    }
+    break;
+
+  case QAbstractSocket::UnknownNetworkLayerProtocol:
+    ret=addr.toString();
+    break;
+  }
+
+  return ret;
+}
+
+
+QHostAddress ClfEntry::GetDnsAddress(const QString &hostname) const
+{
+  QHostAddress ret;
+  struct sockaddr_in *sa_in=NULL;
+  struct sockaddr_in6 *sa_in6=NULL;
+  Q_IPV6ADDR addr6;
+  struct addrinfo *res=NULL;
+  int recs=getaddrinfo(hostname.toUtf8(),NULL,NULL,&res);
+
+  if(recs>0) {
+    switch(res->ai_family) {
+    case AF_INET:
+      sa_in=(struct sockaddr_in *)(res->ai_addr);
+      ret.setAddress(ntohl(sa_in->sin_addr.s_addr));
+      break;
+
+    case AF_INET6:
+      sa_in6=(struct sockaddr_in6 *)(res->ai_addr);
+      for(int i=0;i<16;i++) {
+	addr6[i]=sa_in6->sin6_addr.s6_addr[i];
+      }
+      ret.setAddress(addr6);
+      break;
+    }
+  }
+  freeaddrinfo(res);
+
   return ret;
 }

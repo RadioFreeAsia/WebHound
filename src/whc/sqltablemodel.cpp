@@ -23,24 +23,11 @@
 
 #include "db.h"
 #include "sqltablemodel.h"
-/*
-#include "../../icons/greenball.xpm"
-#include "../../icons/redball.xpm"
-#include "../../icons/whiteball.xpm"
-*/
+
 SqlTableModel::SqlTableModel(QObject *parent)
   : QAbstractTableModel(parent)
 {
   model_columns=0;
-
-  //
-  // Icons
-  //
-  /*
-  model_greenball_map=new QPixmap(greenball_xpm);
-  model_redball_map=new QPixmap(redball_xpm);
-  model_whiteball_map=new QPixmap(whiteball_xpm);
-  */
 }
 
 
@@ -111,20 +98,13 @@ QVariant SqlTableModel::data(const QModelIndex &index,int role) const
       }
       return tr("No");
 
-      /*
-    case SqlTableModel::ChassisType:
-      return QVariant(Chassis::typeString((Chassis::Type)value.toInt()));
-
-    case SqlTableModel::ReceiverType:
-      return QVariant(Receiver::typeString((Receiver::Type)value.toInt()));
-      */
     case SqlTableModel::BiStateType:
     case SqlTableModel::TriStateType:
       return QVariant();
 
     case SqlTableModel::NumericType:
     case SqlTableModel::DefaultType:
-      if(value.isNull()) {
+      if(value.isNull()||value.toString().isEmpty()) {
 	return QVariant(model_null_texts.at(index.column()));
       }
       return value;

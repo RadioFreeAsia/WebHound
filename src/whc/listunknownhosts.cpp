@@ -42,12 +42,14 @@ ListUnknownHosts::ListUnknownHosts(QWidget *parent)
   list_model->setQuery(QString("select ")+
 		       "ID,"+
 		       "HOSTNAME,"+
+		       "IP_ADDRESS,"+
 		       "LAST_SEEN "+
 		       "from UNKNOWN_HOSTS order by HOSTNAME");
   list_model->setHeaderData(0,Qt::Horizontal,tr("ID"));
   list_model->setFieldType(0,SqlTableModel::NumericType);
-  list_model->setHeaderData(1,Qt::Horizontal,tr("Hostname"));
-  list_model->setHeaderData(2,Qt::Horizontal,tr("Last Seen"));
+  list_model->setHeaderData(1,Qt::Horizontal,tr("Host Name"));
+  list_model->setHeaderData(2,Qt::Horizontal,tr("Address"));
+  list_model->setHeaderData(3,Qt::Horizontal,tr("Last Seen"));
   list_view=new TableView(this);
   list_view->setModel(list_model);
   list_view->resizeColumnsToContents();
@@ -81,6 +83,7 @@ int ListUnknownHosts::exec(int ua_id)
   list_model->setQuery(QString("select ")+
 		       "ID,"+
 		       "HOSTNAME,"+
+		       "IP_ADDRESS,"+
 		       "LAST_SEEN "+
 		       "from UNKNOWN_HOSTS where "+
 		       QString().sprintf("USER_AGENT_ID=%d ",ua_id)+

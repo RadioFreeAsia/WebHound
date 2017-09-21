@@ -22,6 +22,7 @@
 #define CLFENTRY_H
 
 #include <QDateTime>
+#include <QHostAddress>
 #include <QList>
 #include <QString>
 
@@ -50,6 +51,7 @@ class ClfEntry
  public:
   ClfEntry();
   QString hostName() const;
+  QHostAddress hostAddress() const;
   QString identUsername() const;
   QString httpUsername() const;
   QDateTime timestamp() const;
@@ -74,7 +76,10 @@ class ClfEntry
   int MonthField(const QString &str) const;
   QString DelimitedField(QStringList *fields,int *ptr,const QString &delim1,
 			 const QString &delim2,bool *ok);
+  QString GetDnsName(const QHostAddress &addr) const;
+  QHostAddress GetDnsAddress(const QString &hostname) const;
   QString clf_host_name;
+  QHostAddress clf_host_address;
   QString clf_ident_username;
   QString clf_http_username;
   QDateTime clf_timestamp;

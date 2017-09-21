@@ -66,7 +66,7 @@ MainObject::MainObject(QWidget *parent)
   }
   while(fgets(line,1024,f)!=NULL) {
     if(!ProcessLine(QString(line).trimmed())) {
-      fprintf(stderr,"line %d: parser error\n",lineno+1);
+      fprintf(stderr,"line %d: parser error [%s]\n",lineno+1,line);
     }
   }
   exit(0);
@@ -93,7 +93,8 @@ bool MainObject::ProcessLine(const QString &line)
       while(q->next()) {
 	pgm_quan++;
 	sql=QString("select LAST_SEEN from HOSTS where ")+
-	  "(NAME=\""+SqlQuery::escape(clf->hostName())+"\")&&"+
+	  "(IP_ADDRESS=\""+SqlQuery::escape(clf->hostAddress().toString())+
+	  "\")&&"+
 	  QString().sprintf("(PROGRAM_ID=%d)",q->value(0).toInt());
 	q1=new SqlQuery(sql);
 	if(q1->first()) {
@@ -101,7 +102,8 @@ bool MainObject::ProcessLine(const QString &line)
 	    sql=QString("update HOSTS set ")+
 	      "LAST_SEEN=\""+
 	      clf->timestamp().toString("yyyy-MM-dd hh:mm:ss")+"\" where "+
-	      "(NAME=\""+SqlQuery::escape(clf->hostName())+"\")&&"+
+	      "(IP_ADDRESS=\""+SqlQuery::escape(clf->hostAddress().toString())+
+	      "\")&&"+
 	      QString().sprintf("(PROGRAM_ID=%d)",q->value(0).toInt());
 	    SqlQuery::run(sql);
 	  }
@@ -109,6 +111,8 @@ bool MainObject::ProcessLine(const QString &line)
 	else {
 	  sql=QString("insert into HOSTS set ")+
 	    "NAME=\""+SqlQuery::escape(clf->hostName())+"\","+
+	    "IP_ADDRESS=\""+SqlQuery::escape(clf->hostAddress().toString())+
+	    "\","+
 	    QString().sprintf("PROGRAM_ID=%d,",q->value(0).toInt())+
 	    "USER_AGENT_VERSION=\""+
 	    SqlQuery::escape(clf->userAgent(i)->version())+"\","+
@@ -141,8 +145,20 @@ bool MainObject::ProcessLine(const QString &line)
 	    "LAST_SEEN=\""+
 	    clf->timestamp().toString("yyyy-MM-dd hh:mm:ss")+"\" "+
 	    "where "+
-	    "(HOSTNAME=\""+SqlQuery::escape(clf->hostName())+"\")&&"+
+	    "(IP_ADDRESS=\""+SqlQuery::escape(clf->hostAddress().toString())+
+	    "\")&&"+
 	    QString().sprintf("(USER_AGENT_ID=%d)",q1->value(0).toInt());
+	  SqlQuery::run(sql);
+	}
+	else {
+	  sql=QString("insert into UNKNOWN_HOSTS set ")+
+	    "HOSTNAME=\""+SqlQuery::escape(clf->hostName())+"\","+
+	    "IP_ADDRESS=\""+SqlQuery::escape(clf->hostAddress().toString())+
+	    "\","+
+	    QString().sprintf("USER_AGENT_ID=%d,",q->value(0).toInt())+
+	    "LAST_SEEN=\""+clf->timestamp().toString("yyyy-MM-dd hh:mm:ss")+
+	    "\","+
+	    "LOG_LINE=\""+SqlQuery::escape(line)+"\"";
 	  SqlQuery::run(sql);
 	}
 	delete q1;
@@ -153,6 +169,7 @@ bool MainObject::ProcessLine(const QString &line)
 	int ua_id=SqlQuery::run(sql).toInt();
 	sql=QString("insert into UNKNOWN_HOSTS set ")+
 	  "HOSTNAME=\""+SqlQuery::escape(clf->hostName())+"\","+
+	  "IP_ADDRESS=\""+SqlQuery::escape(clf->hostAddress().toString())+"\","+
 	  QString().sprintf("USER_AGENT_ID=%d,",ua_id)+
 	  "LAST_SEEN=\""+clf->timestamp().toString("yyyy-MM-dd hh:mm:ss")+"\","+
 	  "LOG_LINE=\""+SqlQuery::escape(line)+"\"";

@@ -37,17 +37,18 @@ ListHosts::ListHosts(QWidget *parent)
   list_model->setQuery(QString("select ")+
 		      "ID,"+
 		      "NAME,"+
+		      "IP_ADDRESS,"+
 		      "USER_AGENT_VERSION,"+
 		      "USER_AGENT_OPTIONS,"+
 		      "LAST_SEEN "+
 		      "from HOSTS order by NAME,LAST_SEEN");
   list_model->setHeaderData(0,Qt::Horizontal,tr("ID"));
   list_model->setFieldType(0,SqlTableModel::NumericType);
-  list_model->setHeaderData(1,Qt::Horizontal,tr("Host"));
-  list_model->setHeaderData(2,Qt::Horizontal,tr("Version"));
-  list_model->setHeaderData(3,Qt::Horizontal,tr("Options"));
-  list_model->setHeaderData(4,Qt::Horizontal,tr("Last Seen"));
-  //  list_model->setFieldType(4,SqlTableModel::DateTimeType);
+  list_model->setHeaderData(1,Qt::Horizontal,tr("Host Name"));
+  list_model->setHeaderData(2,Qt::Horizontal,tr("Address"));
+  list_model->setHeaderData(3,Qt::Horizontal,tr("Version"));
+  list_model->setHeaderData(4,Qt::Horizontal,tr("Options"));
+  list_model->setHeaderData(5,Qt::Horizontal,tr("Last Seen"));
   list_view=new TableView(this);
   list_view->setModel(list_model);
   list_view->resizeColumnsToContents();
@@ -76,6 +77,7 @@ int ListHosts::exec(int pgm_id)
   list_model->setQuery(QString("select ")+
 		       "ID,"+
 		       "NAME,"+
+		       "IP_ADDRESS,"+
 		       "USER_AGENT_VERSION,"+
 		       "USER_AGENT_OPTIONS,"+
 		       "LAST_SEEN "+

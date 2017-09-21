@@ -48,6 +48,7 @@ ListUnknownUas::ListUnknownUas(QWidget *parent)
   list_model->setHeaderData(0,Qt::Horizontal,tr("ID"));
   list_model->setFieldType(0,SqlTableModel::NumericType);
   list_model->setHeaderData(1,Qt::Horizontal,tr("User Agent"));
+  list_model->setNullText(1,tr("[empty]"));
   list_view=new TableView(this);
   list_view->setModel(list_model);
   list_view->resizeColumnsToContents();
