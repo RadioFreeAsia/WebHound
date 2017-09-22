@@ -33,3 +33,5 @@
 	state in whc(1).
 2017-09-22 Fred Gleason <fredg@paravelsystems.com>
 	* Added 'conf/logrotate-http-sample'.
+2017-09-22 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to 0.6.0.
