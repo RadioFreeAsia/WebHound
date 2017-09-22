@@ -42,6 +42,7 @@ class ListUnknownUas : public QDialog
  private slots:
   void listunknownhostsData();
   void deleteData();
+  void clickedData(const QModelIndex &index);
   void closeData();
 
  protected:

@@ -86,6 +86,8 @@ MainWidget::MainWidget(QWidget *parent)
   whc_view=new TableView(this);
   whc_view->setModel(whc_model);
   whc_view->resizeColumnsToContents();
+  connect(whc_view,SIGNAL(clicked(const QModelIndex &)),
+	  this,SLOT(clickedData(const QModelIndex &)));
 
   //
   // Add Button
@@ -99,6 +101,7 @@ MainWidget::MainWidget(QWidget *parent)
   //
   whc_edit_button=new QPushButton(tr("Edit"),this);
   whc_edit_button->setFont(label_font);
+  whc_edit_button->setDisabled(true);
   connect(whc_edit_button,SIGNAL(clicked()),this,SLOT(editData()));
 
   //
@@ -106,6 +109,7 @@ MainWidget::MainWidget(QWidget *parent)
   //
   whc_delete_button=new QPushButton(tr("Delete"),this);
   whc_delete_button->setFont(label_font);
+  whc_delete_button->setDisabled(true);
   connect(whc_delete_button,SIGNAL(clicked()),this,SLOT(deleteData()));
 
   //
@@ -113,6 +117,7 @@ MainWidget::MainWidget(QWidget *parent)
   //
   whc_listhosts_button=new QPushButton(tr("List")+"\n"+tr("Hosts"),this);
   whc_listhosts_button->setFont(label_font);
+  whc_listhosts_button->setDisabled(true);
   connect(whc_listhosts_button,SIGNAL(clicked()),this,SLOT(listhostsData()));
 
   //
@@ -147,6 +152,7 @@ void MainWidget::addData()
     whc_model->update();
     whc_view->select(0,pgm_id);
     whc_view->resizeColumnsToContents();
+    clickedData(QModelIndex());
   }
   else {
     Program::remove(pgm_id);
@@ -183,6 +189,14 @@ void MainWidget::deleteData()
     whc_model->update();
     delete pgm;
   }
+}
+
+
+void MainWidget::clickedData(const QModelIndex &)
+{
+  whc_edit_button->setEnabled(true);
+  whc_delete_button->setEnabled(true);
+  whc_listhosts_button->setEnabled(true);
 }
 
 

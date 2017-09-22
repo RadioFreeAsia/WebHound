@@ -28,3 +28,6 @@
 	* Implemented DNS lookups for hostnames and IP addresses.
 	* Added indices on 'HOSTS' and 'UNKNOWN_HOSTS' tables.
 	* Incremented the database version to 4.
+2017-09-22 Fred Gleason <fredg@paravelsystems.com>
+	* Added logic to disable buttons until target items are in a selected
+	state in whc(1).

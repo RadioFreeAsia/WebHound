@@ -52,6 +52,8 @@ ListUnknownUas::ListUnknownUas(QWidget *parent)
   list_view=new TableView(this);
   list_view->setModel(list_model);
   list_view->resizeColumnsToContents();
+  connect(list_view,SIGNAL(clicked(const QModelIndex &)),
+	  this,SLOT(clickedData(const QModelIndex &)));
 
   //
   // List Hosts Button
@@ -67,6 +69,7 @@ ListUnknownUas::ListUnknownUas(QWidget *parent)
   //
   list_delete_button=new QPushButton(tr("Delete"),this);
   list_delete_button->setFont(label_font);
+  list_delete_button->setDisabled(true);
   connect(list_delete_button,SIGNAL(clicked()),this,SLOT(deleteData()));
 
   //
@@ -93,6 +96,8 @@ int ListUnknownUas::exec()
 		       "USER_AGENT "+
 		       "from UNKNOWN_USER_AGENTS order by ID");
   list_view->resizeColumnsToContents();
+  list_listunknownhosts_button->
+    setEnabled(list_view->selectionModel()->hasSelection());
   return QDialog::exec();
 }
 
@@ -119,6 +124,13 @@ void ListUnknownUas::deleteData()
     QSqlDatabase::database().commit();
     list_model->update();
   }
+}
+
+
+void ListUnknownUas::clickedData(const QModelIndex &index)
+{
+  list_listunknownhosts_button->setEnabled(true);
+  list_delete_button->setEnabled(true);
 }
 
 

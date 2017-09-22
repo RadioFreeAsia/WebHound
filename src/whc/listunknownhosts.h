@@ -41,6 +41,7 @@ class ListUnknownHosts : public QDialog
 
  private slots:
   void showloglineData();
+  void clickedData(const QModelIndex &index);
   void closeData();
 
  protected:

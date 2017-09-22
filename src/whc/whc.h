@@ -45,6 +45,7 @@ class MainWidget : public QMainWindow
   void addData();
   void editData();
   void deleteData();
+  void clickedData(const QModelIndex &);
   void listhostsData();
   void listunknownuasData();
 

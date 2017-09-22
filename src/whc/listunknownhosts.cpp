@@ -53,9 +53,11 @@ ListUnknownHosts::ListUnknownHosts(QWidget *parent)
   list_view=new TableView(this);
   list_view->setModel(list_model);
   list_view->resizeColumnsToContents();
+  connect(list_view,SIGNAL(clicked(const QModelIndex &)),
+	  this,SLOT(clickedData(const QModelIndex &)));
 
   //
-  // Close Button
+  // Show Log Line Button
   //
   list_showlogline_button=new QPushButton(tr("Show Log")+"\n"+tr("Entry"),this);
   list_showlogline_button->setFont(label_font);
@@ -89,6 +91,8 @@ int ListUnknownHosts::exec(int ua_id)
 		       QString().sprintf("USER_AGENT_ID=%d ",ua_id)+
 		       "order by HOSTNAME");
   list_view->resizeColumnsToContents();
+  list_showlogline_button->
+    setEnabled(list_view->selectionModel()->hasSelection());
   return QDialog::exec();
 }
 
@@ -99,6 +103,12 @@ void ListUnknownHosts::showloglineData()
   if(s->hasSelection()) {
     list_showlogline_dialog->exec(s->selectedRows()[0].data().toInt());
   }
+}
+
+
+void ListUnknownHosts::clickedData(const QModelIndex &index)
+{
+  list_showlogline_button->setEnabled(true);
 }
 
 
