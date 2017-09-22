@@ -99,6 +99,7 @@ int EditProgram::exec(int *pgm_id)
   else {
     setWindowTitle(tr("WebHound - Edit Program [new]"));
     edit_name_edit->setText("[new program]");
+    edit_user_agent_string_edit->setText("");
     edit_description_edit->setText("");
   }
   return QDialog::exec();
