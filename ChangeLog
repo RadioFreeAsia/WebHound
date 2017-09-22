@@ -46,3 +46,5 @@
 	* Fixed a bug in the 'Edit Program' dialog in whc(1) that caused the
 	'User Agent' field to fail to be blanked out when creating a new
 	program entry.
+2017-09-22 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to 0.6.2.
