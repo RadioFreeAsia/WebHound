@@ -21,7 +21,7 @@
 	* Added a 'List Unknow User Agents' dialog in whc(1).
 	* Added a 'List Unknown Hosts' dialog' in whc(1).
 	* Added a 'Show Unknown Host LogLine' dialog whc(1).
-2017-09-07 Fred Gleason <fredg@paravelsystems.com>
+2017-09-21 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'HOSTS.IP_ADDRESS' field to the database.
 	* Added an 'UNKNOWN_HOSTS.IP_ADDRESS' field to the database.
 	* Incremented the database version to 3.
