@@ -37,6 +37,7 @@ WebHound is a tool for monitoring the user agents used to access a web server.
 
 %package server
 Summary: Script for processing web server logs
+Requires: qt-mysql
 
 
 %description server

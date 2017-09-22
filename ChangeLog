@@ -40,3 +40,5 @@
 	the default configuration file to fail for the 'server' sub-package.
 2017-09-22 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 0.6.1.
+2017-09-22 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'qt-mysql' dependency to the 'server' sub-package.
