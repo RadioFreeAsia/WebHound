@@ -31,3 +31,5 @@
 2017-09-22 Fred Gleason <fredg@paravelsystems.com>
 	* Added logic to disable buttons until target items are in a selected
 	state in whc(1).
+2017-09-22 Fred Gleason <fredg@paravelsystems.com>
+	* Added 'conf/logrotate-http-sample'.

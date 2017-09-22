@@ -20,7 +20,8 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-EXTRA_DIST = webhound-sample.conf
+EXTRA_DIST = logrotate-http-sample\
+             webhound-sample.conf
 
 CLEANFILES = *~
 MAINTAINERCLEANFILES = *~\

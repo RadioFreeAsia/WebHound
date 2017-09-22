@@ -1,0 +1,18 @@
+#
+# Sample config file for logrotate with Apache httpd
+#
+/var/log/httpd/*log {
+    daily
+    rotate 30
+    dateext
+    missingok
+    notifempty
+    sharedscripts
+    delaycompress
+    prerotate
+	/usr/bin/whprocess access_log
+    endscript
+    postrotate
+        /bin/systemctl reload httpd.service > /dev/null 2>/dev/null || true
+    endscript
+}
