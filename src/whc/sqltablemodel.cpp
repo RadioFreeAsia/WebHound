@@ -2,7 +2,7 @@
 //
 // Two dimensional, SQL-based data model for WebHound.
 //
-//   (C) Copyright 2017 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2017-2019 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -27,7 +27,6 @@
 SqlTableModel::SqlTableModel(QObject *parent)
   : QAbstractTableModel(parent)
 {
-  model_columns=0;
 }
 
 
@@ -62,7 +61,7 @@ void SqlTableModel::setNullText(int section,const QString &str)
 
 int SqlTableModel::columnCount(const QModelIndex &index) const
 {
-  return model_columns;
+  return model_fields.size();
 }
 
 
@@ -199,10 +198,14 @@ QVariant SqlTableModel::data(int row,int column,int role) const
 
 void SqlTableModel::setQuery(const QString &sql)
 {
+  model_base_sql=sql;
+
+  QStringList f0=sql.split(" ",QString::SkipEmptyParts);
+  model_fields=f0.at(1).split(",");
+
   model_display_datas.clear();
 
-  SqlQuery *q=new SqlQuery(sql);
-  model_columns=q->columns();
+  SqlQuery *q=new SqlQuery(model_base_sql+model_order_sql);
   while(q->next()) {
     std::vector<QVariant> row;
     for(int i=0;i<q->columns();i++) {
@@ -211,8 +214,7 @@ void SqlTableModel::setQuery(const QString &sql)
     model_display_datas.push_back(row);
   }
   delete q;
-  model_sql=sql;
-  for(int i=model_null_texts.size();i<model_columns;i++) {
+  for(int i=model_null_texts.size();i<model_fields.size();i++) {
     model_null_texts.push_back(tr("[none]"));
   }
   emit layoutChanged();
@@ -276,7 +278,7 @@ bool SqlTableModel::insertRows(int row,const QString &sql)
     beginInsertRows(QModelIndex(),row,row+q->size()-1);
     while(q->next()) {
       std::vector<QVariant> row;
-      for(int i=0;i<model_columns;i++) {
+      for(int i=0;i<model_fields.size();i++) {
 	row.push_back(q->value(i));
       }
       model_display_datas.push_back(row);
@@ -302,10 +304,25 @@ bool SqlTableModel::removeRows(int row,int count,const QModelIndex &parent)
 }
 
 
+void SqlTableModel::sort(int col,Qt::SortOrder order)
+{
+  if(col<0) {
+    model_order_sql="";
+  }
+  else {
+    model_order_sql=" order by "+model_fields.at(col);
+  }
+  if(order==Qt::AscendingOrder) {
+    model_order_sql+=" desc";
+  }
+  update();
+}
+
+
 void SqlTableModel::update()
 {
-  if(!model_sql.isEmpty()) {
-    setQuery(model_sql);
+  if(!model_base_sql.isEmpty()) {
+    setQuery(model_base_sql);
   }
 }
 

@@ -2,7 +2,7 @@
 //
 // List host entries for a given program
 //
-//   (C) Copyright 2017 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2017-2019 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -35,13 +35,13 @@ ListHosts::ListHosts(QWidget *parent)
   //
   list_model=new SqlTableModel(this);
   list_model->setQuery(QString("select ")+
-		      "ID,"+
-		      "NAME,"+
-		      "IP_ADDRESS,"+
-		      "USER_AGENT_VERSION,"+
-		      "USER_AGENT_OPTIONS,"+
-		      "LAST_SEEN "+
-		      "from HOSTS order by NAME,LAST_SEEN");
+		       "ID,"+                  // 00
+		       "NAME,"+                // 01
+		       "IP_ADDRESS,"+          // 02
+		       "USER_AGENT_VERSION,"+  // 03
+		       "USER_AGENT_OPTIONS,"+  // 04
+		       "LAST_SEEN "+           // 05
+		       "from HOSTS");
   list_model->setHeaderData(0,Qt::Horizontal,tr("ID"));
   list_model->setFieldType(0,SqlTableModel::NumericType);
   list_model->setHeaderData(1,Qt::Horizontal,tr("Host Name"));
@@ -51,6 +51,7 @@ ListHosts::ListHosts(QWidget *parent)
   list_model->setHeaderData(5,Qt::Horizontal,tr("Last Seen"));
   list_view=new TableView(this);
   list_view->setModel(list_model);
+  list_view->setSortingEnabled(true);
   list_view->resizeColumnsToContents();
 
   //
@@ -82,8 +83,7 @@ int ListHosts::exec(int pgm_id)
 		       "USER_AGENT_OPTIONS,"+
 		       "LAST_SEEN "+
 		       "from HOSTS where "+
-		       QString().sprintf("PROGRAM_ID=%d ",pgm_id)+
-		       "order by NAME,LAST_SEEN");
+		       QString().sprintf("PROGRAM_ID=%d ",pgm_id));
   list_view->resizeColumnsToContents();
   delete pgm;
   return QDialog::exec();

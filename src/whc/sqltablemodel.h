@@ -2,7 +2,7 @@
 //
 // Two dimensional, SQL-based data model for WebHound
 //
-//   (C) Copyright 2017 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2017-2019 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -58,6 +58,7 @@ class SqlTableModel : public QAbstractTableModel
   void setFieldType(int section,FieldType type,int key_col=-1);
   bool insertRows(int row,const QString &sql);
   bool removeRows(int row,int count,const QModelIndex &parent=QModelIndex());
+  void sort(int col,Qt::SortOrder order);
 
  public slots:
   void update();
@@ -65,8 +66,9 @@ class SqlTableModel : public QAbstractTableModel
  private:
   QVariant GetHeader(int section) const;
   QFont model_font;
-  int model_columns;
-  QString model_sql;
+  QString model_base_sql;
+  QString model_order_sql;
+  QStringList model_fields;
   std::map<int,QVariant> model_headers;
   std::map<int,FieldType> model_field_types;
   std::map<int,int> model_field_key_columns;
