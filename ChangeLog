@@ -57,3 +57,5 @@
 	to fail to be saved to the database when updating an existing host
 	record.
 	* Added a '--log-to-syslog=' switch to whprocess(1).
+2019-08-07 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the packag version to 0.7.0.
