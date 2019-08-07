@@ -2,7 +2,7 @@
 //
 // whprocess(1) WebHound log processor
 //
-//   (C) Copyright 2017 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2017-2019 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -25,7 +25,7 @@
 
 #include "config.h"
 
-#define WHPROCESS_USAGE "<logfile> \n"
+#define WHPROCESS_USAGE "[--log-to-syslog] <logfile> \n"
 
 class MainObject : public QObject
 {
@@ -35,6 +35,8 @@ class MainObject : public QObject
 
  private:
   bool ProcessLine(const QString &line);
+  void LogToSyslog(int priority,const char *fmt,...) const;
+  bool wh_log_to_syslog;
   Config *wh_config;
 };
 

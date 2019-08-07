@@ -52,3 +52,8 @@
 	* Made the 'List Hosts' dialog sortable.
 2019-08-02 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the packag version to 0.6.3.
+2019-08-07 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug in whprocess(1) that caused details of the user agent
+	to fail to be saved to the database when updating an existing host
+	record.
+	* Added a '--log-to-syslog=' switch to whprocess(1).
