@@ -61,4 +61,6 @@
 	* Incremented the packag version to 0.7.0.
 2019-08-27 Fred Gleason <fredg@paravelsystems.com>
 	* Added a filter to the 'List Hosts' dialog.
+2019-08-27 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to 0.8.0.
 
