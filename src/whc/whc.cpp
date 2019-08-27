@@ -140,7 +140,7 @@ MainWidget::MainWidget(QWidget *parent)
 
 QSize MainWidget::sizeHint() const
 {
-  return QSize(600,400);
+  return QSize(640,480);
 }
 
 

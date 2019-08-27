@@ -22,9 +22,12 @@
 #define LISTHOSTS_H
 
 #include <QDialog>
+#include <QLabel>
 #include <QPushButton>
+#include <QSpinBox>
 
 #include "config.h"
+#include "program.h"
 #include "sqltablemodel.h"
 #include "tableview.h"
 
@@ -39,6 +42,7 @@ class ListHosts : public QDialog
   int exec(int pgm_id);
 
  private slots:
+  void filterChangedData(int days);
   void closeData();
 
  protected:
@@ -46,9 +50,12 @@ class ListHosts : public QDialog
   void resizeEvent(QResizeEvent *e);
 
  private:
+  QLabel *list_filter_label;
+  QSpinBox *list_filter_spin;
   TableView *list_view;
   SqlTableModel *list_model;
   QPushButton *list_close_button;
+  Program *list_program;
   Config *list_config;
 };
 

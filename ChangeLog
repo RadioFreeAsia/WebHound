@@ -59,3 +59,6 @@
 	* Added a '--log-to-syslog=' switch to whprocess(1).
 2019-08-07 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the packag version to 0.7.0.
+2019-08-27 Fred Gleason <fredg@paravelsystems.com>
+	* Added a filter to the 'List Hosts' dialog.
+

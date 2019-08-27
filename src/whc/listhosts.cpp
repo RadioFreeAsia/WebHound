@@ -23,12 +23,26 @@
 
 #include "db.h"
 #include "listhosts.h"
-#include "program.h"
 
 ListHosts::ListHosts(QWidget *parent)
   : QDialog(parent)
 {
+  list_program=NULL;
+
   QFont label_font(font().family(),font().pointSize(),QFont::Bold);
+
+  //
+  // Filter
+  //
+  list_filter_spin=new QSpinBox(this);
+  list_filter_spin->setRange(1,102);
+  list_filter_spin->setSuffix(" "+tr("weeks"));
+  list_filter_spin->setValue(4);
+  connect(list_filter_spin,SIGNAL(valueChanged(int)),
+	  this,SLOT(filterChangedData(int)));
+  list_filter_label=new QLabel(tr("Show No Records Older Than")+":",this);
+  list_filter_label->setFont(label_font);
+  list_filter_label->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
 
   //
   // Hosts List
@@ -67,14 +81,25 @@ ListHosts::ListHosts(QWidget *parent)
 
 QSize ListHosts::sizeHint() const
 {
-  return QSize(640,480);
+  return QSize(800,600);
 }
 
 
 int ListHosts::exec(int pgm_id)
 {
-  Program *pgm=new Program(pgm_id);
-  setWindowTitle(tr("Hosts for")+" \""+pgm->name()+"\"");
+  list_program=new Program(pgm_id);
+
+  setWindowTitle(tr("Hosts for")+" \""+list_program->name()+"\"");
+  filterChangedData(list_filter_spin->value());
+
+  return QDialog::exec();
+}
+
+
+void ListHosts::filterChangedData(int days)
+{
+  QDate date=QDate::currentDate().addDays(-7*list_filter_spin->value());
+
   list_model->setQuery(QString("select ")+
 		       "ID,"+
 		       "NAME,"+
@@ -83,15 +108,19 @@ int ListHosts::exec(int pgm_id)
 		       "USER_AGENT_OPTIONS,"+
 		       "LAST_SEEN "+
 		       "from HOSTS where "+
-		       QString().sprintf("PROGRAM_ID=%d ",pgm_id));
+		       QString().sprintf("PROGRAM_ID=%d && ",
+					 list_program->id())+
+		       "LAST_SEEN>=\""+
+		       date.toString("yyyy-MM-dd")+" 00:00:00\"");
   list_view->resizeColumnsToContents();
-  delete pgm;
-  return QDialog::exec();
 }
 
 
 void ListHosts::closeData()
 {
+  delete list_program;
+  list_program=NULL;
+
   done(0);
 }
 
@@ -104,7 +133,10 @@ void ListHosts::closeEvent(QCloseEvent *e)
 
 void ListHosts::resizeEvent(QResizeEvent *e)
 {
-  list_view->setGeometry(10,10,size().width()-20,size().height()-90);
+  list_filter_label->setGeometry(10,2,250,20);
+  list_filter_spin->setGeometry(265,2,100,20);
+
+  list_view->setGeometry(10,32,size().width()-20,size().height()-122);
 
   list_close_button->setGeometry(size().width()-90,size().height()-70,80,60);
 }
