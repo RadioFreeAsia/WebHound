@@ -69,3 +69,5 @@
 	* Incremented the database version to 5.
 	* Modified whprocess(1) to include the 'HOSTS.NAME' column
 	when updating an existing record.
+2019-08-29 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to 0.8.1.
