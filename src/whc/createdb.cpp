@@ -179,6 +179,15 @@ bool MainWidget::CheckSchema()
     }
   }
 
+  if(schema<5) {
+    sql=QString("create unique index ")+
+      "IP_ADDRESS_IDX on HOSTS(IP_ADDRESS,PROGRAM_ID)";
+    SqlQuery::run(sql,&ok);
+    if(!ok) {
+      return false;
+    }
+  }
+
 
   //
   // *** End of schema updates ***

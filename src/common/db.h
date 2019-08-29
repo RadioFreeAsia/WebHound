@@ -27,7 +27,7 @@
 #include <QTimer>
 #include <QVariant>
 
-#define WEBHOUND_SCHEMA_VERSION 4
+#define WEBHOUND_SCHEMA_VERSION 5
 #define WEBHOUND_DB_HEARTBEAT_INTERVAL 60000
 
 class SqlQuery : public QSqlQuery

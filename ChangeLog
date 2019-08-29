@@ -63,4 +63,9 @@
 	* Added a filter to the 'List Hosts' dialog.
 2019-08-27 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 0.8.0.
-
+2019-08-29 Fred Gleason <fredg@paravelsystems.com>
+	* Added a unique index 'IP_ADDRESS_IDX(IP_ADDRESS,PROGRAM_ID)' to
+	the 'HOSTS' table.
+	* Incremented the database version to 5.
+	* Modified whprocess(1) to include the 'HOSTS.NAME' column
+	when updating an existing record.

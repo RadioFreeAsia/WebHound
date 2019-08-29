@@ -132,6 +132,7 @@ bool MainObject::ProcessLine(const QString &line)
 	if(q1->first()) {
 	  if(q1->value(0).toDateTime()<clf->timestamp()) {
 	    sql=QString("update HOSTS set ")+
+	      "NAME=\""+SqlQuery::escape(clf->hostName())+"\","+
 	      "USER_AGENT_VERSION=\""+
 	      SqlQuery::escape(clf->userAgent(i)->version())+"\","+
 	      "USER_AGENT_OPTIONS=\""+
