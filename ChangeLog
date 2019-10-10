@@ -74,3 +74,5 @@
 2019-10-10 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'SqlTableModel::sqlQuery()' method.
 	* Added a 'Generate Report' button to the 'List Hosts' dialog.
+2019-10-10 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to 0.8.2.
