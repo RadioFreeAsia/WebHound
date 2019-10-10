@@ -71,3 +71,6 @@
 	when updating an existing record.
 2019-08-29 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 0.8.1.
+2019-10-10 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'SqlTableModel::sqlQuery()' method.
+	* Added a 'Generate Report' button to the 'List Hosts' dialog.

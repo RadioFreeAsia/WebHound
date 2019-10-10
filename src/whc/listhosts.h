@@ -25,6 +25,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QStringList>
 
 #include "config.h"
 #include "program.h"
@@ -36,6 +37,7 @@ class ListHosts : public QDialog
  Q_OBJECT;
  public:
   ListHosts(QWidget *parent=0);
+  ~ListHosts();
   QSize sizeHint() const;
 
  public slots:
@@ -43,6 +45,7 @@ class ListHosts : public QDialog
 
  private slots:
   void filterChangedData(int days);
+  void reportData();
   void closeData();
 
  protected:
@@ -50,13 +53,17 @@ class ListHosts : public QDialog
   void resizeEvent(QResizeEvent *e);
 
  private:
+  QString CenterLine(const QString &line) const;
+  QString PadField(const QString &field,int width) const;
   QLabel *list_filter_label;
   QSpinBox *list_filter_spin;
   TableView *list_view;
   SqlTableModel *list_model;
+  QPushButton *list_report_button;
   QPushButton *list_close_button;
   Program *list_program;
   Config *list_config;
+  QStringList list_temp_files;
 };
 
 

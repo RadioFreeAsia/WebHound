@@ -48,6 +48,7 @@ class MainWidget : public QMainWindow
   void clickedData(const QModelIndex &);
   void listhostsData();
   void listunknownuasData();
+  void aboutToQuitData();
 
  protected:
   void closeEvent(QCloseEvent *e);

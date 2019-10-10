@@ -25,6 +25,7 @@
 #include <QString>
 
 #define WEBHOUND_CONF_FILE QString("/etc/webhound.conf")
+#define WEBHOUND_REPORT_WIDTH 80
 #define WEBHOUND_DEFAULT_MYSQL_HOSTNAME "localhost"
 #define WEBHOUND_DEFAULT_MYSQL_DBNAME "WebHound"
 #define WEBHOUND_DEFAULT_MYSQL_USERNAME "webhounduser"
@@ -32,6 +33,7 @@
 #define WEBHOUND_DEFAULT_MYSQL_ENGINE "InnoDB"
 #define WEBHOUND_DEFAULT_MYSQL_CHARSET "utf8"
 #define WEBHOUND_DEFAULT_MYSQL_COLLATION "utf8_general_ci"
+#define WEBHOUND_DEFAULT_TEXT_EDITOR "xterm -e vi"
 
 class Config
 {

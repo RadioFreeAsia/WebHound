@@ -133,6 +133,7 @@ MainWidget::MainWidget(QWidget *parent)
   whc_close_button=new QPushButton(tr("Close"),this);
   whc_close_button->setFont(label_font);
   connect(whc_close_button,SIGNAL(clicked()),qApp,SLOT(quit()));
+  connect(qApp,SIGNAL(aboutToQuit()),this,SLOT(aboutToQuitData()));
 
   setMinimumSize(sizeHint());
 }
@@ -215,9 +216,15 @@ void MainWidget::listunknownuasData()
 }
 
 
+void MainWidget::aboutToQuitData()
+{
+  delete whc_listhosts_dialog;  // So temp files get deleted
+}
+
+
 void MainWidget::closeEvent(QCloseEvent *e)
 {
-  exit(0);
+  qApp->quit();
 }
 
 

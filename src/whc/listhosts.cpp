@@ -21,8 +21,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <QFile>
+
 #include "db.h"
 #include "listhosts.h"
+#include "textfile.h"
 
 ListHosts::ListHosts(QWidget *parent)
   : QDialog(parent)
@@ -69,6 +72,13 @@ ListHosts::ListHosts(QWidget *parent)
   list_view->resizeColumnsToContents();
 
   //
+  // Report Button
+  //
+  list_report_button=new QPushButton(tr("Generate")+"\n"+tr("Report"),this);
+  list_report_button->setFont(label_font);
+  connect(list_report_button,SIGNAL(clicked()),this,SLOT(reportData()));
+
+  //
   // Close Button
   //
   list_close_button=new QPushButton(tr("Close"),this);
@@ -76,6 +86,14 @@ ListHosts::ListHosts(QWidget *parent)
   connect(list_close_button,SIGNAL(clicked()),this,SLOT(closeData()));
 
   setMinimumSize(sizeHint());
+}
+
+
+ListHosts::~ListHosts()
+{
+  for(int i=0;i<list_temp_files.size();i++) {
+    QFile::remove(list_temp_files.at(i));
+  }
 }
 
 
@@ -125,6 +143,59 @@ void ListHosts::closeData()
 }
 
 
+void ListHosts::reportData()
+{
+  QString rpt="";
+  QSqlQuery *q=NULL;
+  QString tempfile;
+
+  //
+  // Title Line
+  //
+  rpt+=
+    CenterLine(tr("Host List Report for")+" \""+list_program->name()+"\"")+"\n";
+
+  //
+  // Sub Title Line
+  //
+  rpt+=CenterLine(tr("Generated on")+" "+
+		  QDate::currentDate().toString("MMMM d, yyyy"))+"\n";
+
+  //
+  // Column Headers
+  //
+  rpt+="------------------------------------------------------------------------------\n";
+  rpt+="|         DNS Name         |   IP Address   | Version  |      Last Seen      |\n";
+  rpt+="|--------------------------|----------------|----------|---------------------|\n";
+
+  //
+  // Report Body
+  //
+  q=new QSqlQuery(list_model->query()+" order by USER_AGENT_VERSION");
+  while(q->next()) {
+    rpt+="| ";
+    rpt+=PadField(q->value(1).toString(),25)+"| ";  // Host Name
+    rpt+=PadField(q->value(2).toString(),15)+"| ";  // IP Address
+    rpt+=PadField(q->value(3).toString(),9)+"| ";  // Version
+    rpt+=
+      PadField(q->value(5).toDateTime().toString("MM/dd/yyyy hh:mm:ss"),20);
+ 
+    rpt+="|\n";
+  }
+  delete q;
+
+  //
+  // Footer
+  //
+  rpt+="------------------------------------------------------------------------------\n";
+
+  tempfile=TextFile(rpt);
+  if(!tempfile.isEmpty()) {
+    list_temp_files.push_back(tempfile);
+  }
+}
+
+
 void ListHosts::closeEvent(QCloseEvent *e)
 {
   closeData();
@@ -138,5 +209,33 @@ void ListHosts::resizeEvent(QResizeEvent *e)
 
   list_view->setGeometry(10,32,size().width()-20,size().height()-122);
 
+  list_report_button->setGeometry(10,size().height()-70,80,60);
+
   list_close_button->setGeometry(size().width()-90,size().height()-70,80,60);
+}
+
+
+QString ListHosts::CenterLine(const QString &line) const
+{
+  QString ret="";
+  int margin=(WEBHOUND_REPORT_WIDTH-line.length())/2;
+
+  for(int i=0;i<margin;i++) {
+    ret+=" ";
+  }
+
+  ret+=line;
+  return ret;
+}
+
+
+QString ListHosts::PadField(const QString &field,int width) const
+{
+  QString ret=field;
+
+  for(int i=0;i<(width-field.length());i++) {
+    ret+=" ";
+  }
+
+  return ret;
 }

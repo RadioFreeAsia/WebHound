@@ -49,6 +49,7 @@ class SqlTableModel : public QAbstractTableModel
   int rowCount(const QModelIndex &index=QModelIndex()) const;
   QVariant data(const QModelIndex &index,int role=Qt::DisplayRole) const;
   QVariant data(int row,int column,int role=Qt::DisplayRole) const;
+  QString query() const;
   void setQuery(const QString &sql);
   QVariant headerData(int section,Qt::Orientation orient,
 		      int role=Qt::DisplayRole) const;

@@ -196,6 +196,12 @@ QVariant SqlTableModel::data(int row,int column,int role) const
 }
 
 
+QString SqlTableModel::query() const
+{
+  return model_base_sql;
+}
+
+
 void SqlTableModel::setQuery(const QString &sql)
 {
   model_base_sql=sql;
